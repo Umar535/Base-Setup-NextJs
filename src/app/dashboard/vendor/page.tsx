@@ -30,7 +30,6 @@ const Vendor = () => {
   }
 
 
-
   return (
     <div>
       <h1>Welcome to Vendor Dashboard</h1>

@@ -2,16 +2,16 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-const Home = () => {
+const Route = () => {
 
   const router = useRouter();
   
   useEffect(() => {
 
-    router.push('/dashboard');
+    router.push('/login');
   }, [router]);
 
   return <div>Loading...</div>;
 };
 
-export default Home;
+export default Route;

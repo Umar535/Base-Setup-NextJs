@@ -33,15 +33,17 @@ import { Button, Drawer, Layout, Menu } from "antd";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useRouter } from "next/router";
-// import { Link, BrowserRouter as Router, useRoutes } from "react-router-dom";
-//import routes from '../Routes/Routes'
+
+import Route from "@/components/Routes/Routes";
+import { deleteCookie, getCookie } from "cookies-next";
 
 const { Header, Sider, Content } = Layout;
 
 const DashboardLayout = ({children}:{children:React.ReactNode}) => {
+
   const [collapsed, setCollapsed] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -64,7 +66,64 @@ const DashboardLayout = ({children}:{children:React.ReactNode}) => {
     window.location.href = "/login"; 
   };
   
-  
+  const role = getCookie('role') || 'undefined';
+
+  const hiddenSidebar=["Training","Performance","Tickets","FileManager","Time Sheet","Project Manager","Events & Meeting"]
+
+  // const allMenuItems = [
+  //   { label: "Dashboard", key: "dashboard" },
+  //   { label: "Organization", key: "Organization" },
+  //   { label: "Training", key: "4-1" },
+  //   { label: "Performance", key: "performance" },
+  //   { label: "Tickets", key: "tickets" },
+  //   { label: "FileManager", key: "filemanager" },
+  //   { label: "Settings", key: "settings" },
+  //   { label: "Time Sheet", key: "Time Sheet" },
+  //   { label: "Project Manager", key: "Project Manager" },
+  //   { label: "Events & Meeting", key: "Events & Meeting" },
+  //   { label: "Logout", key: "Logout" },
+
+  // ];
+
+  // const visibleItems = role === 'vendor'
+  // ? allMenuItems.filter(item => !hiddenSidebar.includes(item.label))
+  // : allMenuItems;
+
+
+  const allMenuItems = [
+    { key: '1', icon: <UserOutlined />, label: 'Dashboard', href: '/dashboard/vendor' },
+    { key: '2', icon: <UserOutlined />, label: 'Organization', href: '/dashboard/vendor' },
+    { key: '3', icon: <UserOutlined />, label: 'Training', href: '/dashboard/vendor' },
+    { key: '4', icon: <UserOutlined />, label: 'Performance', href: '/dashboard/vendor' },
+    { key: '5', icon: <UserOutlined />, label: 'Tickets', href: '/dashboard/vendor' },
+    { key: '6', icon: <UserOutlined />, label: 'FileManager', href: '/dashboard/vendor' },
+    { key: '7', icon: <UserOutlined />, label: 'Settings', href: '/dashboard/vendor' },
+    { key: '8', icon: <UserOutlined />, label: 'Time Sheet', href: '/dashboard/vendor' },
+    { key: '9', icon: <UserOutlined />, label: 'Project Manager', href: '/dashboard/vendor' },
+    { key: '10', icon: <UserOutlined />, label: 'Events & Meeting', href: '/dashboard/vendor' },
+    { key: '11', icon: <UserOutlined onClick={handleLogout} />, label: 'Logout', href: '/dashboard/vendor' },
+  ];
+
+
+  const visibleItems =
+  role === 'vendor'
+    ? allMenuItems.filter(item => !hiddenSidebar.includes(item.label))
+    : allMenuItems;
+
+    const menuItems = [
+      ...visibleItems.map(item => ({
+        key: item.key,
+        icon: item.icon,
+        label: <Link href={item.href}>{item.label}</Link>
+      })),
+      // {
+      //   key: '10',
+      //   icon: <LogoutOutlined />,
+      //   label: <span onClick={handleLogout}>Logout</span>
+      // }
+    ];
+
+
   
   //const router = useRouter();
   // const handleLogout = () => {
@@ -102,7 +161,192 @@ const DashboardLayout = ({children}:{children:React.ReactNode}) => {
 
             {/* Sidebar Content */}
             <div className="flex-1 overflow-auto ">
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]} style={{ background: "transparent" , color:"white" ,  overflowX:"auto", }}>
+
+            <Menu
+  theme="dark"
+  mode="inline"
+  defaultSelectedKeys={["1"]}
+  style={{ background: "transparent", color: "white", overflowX: "auto" }}
+  items={menuItems}
+  
+  // items={[
+  //   {
+  //     key: "1",
+  //     icon: <UserOutlined />,
+  //     label: <Link href="/">Dashboard</Link>,
+  //   },
+  //   {
+  //     key: "2",
+  //     icon: <TeamOutlined />,
+  //     label: "Organization",
+  //     children: [
+  //       {
+  //         key: "2-1",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/dashboard/department">Department</Link>,
+  //       },
+  //       {
+  //         key: "2-2",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/dashboard/subdepartment">Sub Department</Link>,
+  //       },
+  //       {
+  //         key: "2-3",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/dashboard/announcement">Announcements</Link>,
+  //       },
+  //       {
+  //         key: "2-4",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/dashboard/companypolicy">Company Policy</Link>,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     key: "3",
+  //     icon: <ClockCircleOutlined />,
+  //     label: "Time Sheet",
+  //     children: [
+  //       {
+  //         key: "3-1",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/dashboard/attendance">Attendance</Link>,
+  //       },
+  //       {
+  //         key: "3-2",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/dashboard/calender">Calender</Link>,
+  //       },
+  //       {
+  //         key: "3-3",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/dashboard/overtime">Overtime</Link>,
+  //       },
+  //       {
+  //         key: "3-4",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/dashboard/officeshift">Office Shift</Link>,
+  //       },
+  //       {
+  //         key: "3-5",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/dashboard/holiday">Holidays</Link>,
+  //       },
+  //       {
+  //         key: "3-6",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/dashboard/leave">Leaves</Link>,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     key: "4",
+  //     icon: <ReadOutlined />,
+  //     label: "Training",
+  //     children: [
+  //       {
+  //         key: "4-1",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/training">Training</Link>,
+  //       },
+  //       {
+  //         key: "4-2",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/trainingtype">Training Type</Link>,
+  //       },
+  //       {
+  //         key: "4-3",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/trainers">Trainers</Link>,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     key: "5",
+  //     icon: <TrophyOutlined />,
+  //     label: "Performance",
+  //     children: [
+  //       {
+  //         key: "5-1",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/indicators">Indicators</Link>,
+  //       },
+  //       {
+  //         key: "5-2",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/appraisal">Appraisal</Link>,
+  //       },
+  //       {
+  //         key: "5-3",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/kpi">KPI</Link>,
+  //       },
+  //       {
+  //         key: "5-4",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/kpireport">KPI Report</Link>,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     key: "6",
+  //     icon: <ToolOutlined />,
+  //     label: <Link href="/tickets">Tickets</Link>,
+  //   },
+  //   {
+  //     key: "7",
+  //     icon: <FolderOutlined />,
+  //     label: <Link href="/filesmanager">Files Manager</Link>,
+  //   },
+  //   {
+  //     key: "8",
+  //     icon: <ProjectOutlined />,
+  //     label: "Project Manager",
+  //     children: [
+  //       {
+  //         key: "8-1",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/projects">Projects</Link>,
+  //       },
+  //       {
+  //         key: "8-2",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/tasks">Tasks</Link>,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     key: "9",
+  //     icon: <CalendarOutlined />,
+  //     label: "Events & Meetings",
+  //     children: [
+  //       {
+  //         key: "9-1",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/events">Events</Link>,
+  //       },
+  //       {
+  //         key: "9-2",
+  //         icon: <RightCircleFilled />,
+  //         label: <Link href="/meetings">Meetings</Link>,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     key: "10",
+  //     icon: <LogoutOutlined />,
+  //     label: (
+  //       <span onClick={handleLogout} style={{ color: "white" }}>
+  //         Logout
+  //       </span>
+  //     ),
+  //   },
+  // ]}
+/>
+
+
+
+            {/* <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]} style={{ background: "transparent" , color:"white" ,  overflowX:"auto", }}>
             <Menu.Item style={{ color: "white" }} key="1" icon={<UserOutlined />}>
             <Link href= '/'>Dashboard</Link>
             </Menu.Item>
@@ -200,7 +444,7 @@ const DashboardLayout = ({children}:{children:React.ReactNode}) => {
             <Menu.Item style={{ color: "white" }} key="10" icon={<LogoutOutlined />} 
             onClick={handleLogout}
             >Logout</Menu.Item>
-          </Menu>
+          </Menu> */}
             </div>
 
             {/* Sidebar Footer */}
@@ -221,9 +465,9 @@ const DashboardLayout = ({children}:{children:React.ReactNode}) => {
             placement="left"
             closable
             onClose={toggleDrawer}
-            visible={drawerVisible}
+            open={drawerVisible}
             width={250}
-            bodyStyle={{ padding: 0, background: "black" }}
+            //bodyStyle={{ padding: 0, background: "black" }}
           >
             {/* <div className="flex justify-center items-center py-4">
               <img className="h-10 w-10" src="/Logo.png" alt="Logo" />
@@ -342,7 +586,7 @@ const DashboardLayout = ({children}:{children:React.ReactNode}) => {
 </Menu.SubMenu>
 
 <Menu.SubMenu key="sub6" style={{ color: "white" }} icon={<CalendarOutlined />}  title="Events & Meetings">
-<Menu.Item key="9-2" icon={<RightCircleFilled />}>
+<Menu.Item key="9-1" icon={<RightCircleFilled />}>
 <Link href='/events'>Events</Link>
               </Menu.Item>
               <Menu.Item key="9-2" icon={<RightCircleFilled />}>
